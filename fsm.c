@@ -8,7 +8,7 @@
 #include "fsm.h"
 #include<stdlib.h>
 #include<string.h>
-
+#include <unistd.h>
 /**
  * Function to initialize the FSM
  * @param obj pointer to structure of type fsm_object, which defines the FSM
@@ -18,6 +18,7 @@ int fsm_init(struct fsm_object *obj)
     //initialize everything to Null or 0
     obj->fsm_base = NULL;
     obj->fsm_cur_state_name = NULL;
+    obj->fsm_prev_state_name = NULL;
     obj->fsm_arg_num = 0;
     obj->fsm_arg_value = NULL;
     return 0;
@@ -32,10 +33,15 @@ int fsm_init(struct fsm_object *obj)
 int fsm_next_state(struct fsm_object *obj)
 {
     struct fsm_state *tmp = obj->fsm_base;
+    obj->fsm_prev_state = obj->fsm_base;
+    
+
     if ((obj->fsm_base==NULL)||(obj->fsm_cur_state_name==NULL))
     {        
         return -1;
     }
+    // obj->fsm_prev_state = obj->fsm_base;
+    // obj->fsm_prev_state_name=obj->fsm_cur_state_name;
     while ((tmp->name != obj->fsm_cur_state_name)&&(tmp!=NULL))
         tmp = tmp->next;
     if (tmp == NULL)
@@ -50,7 +56,10 @@ int fsm_next_state(struct fsm_object *obj)
  */
 int fsm_main(struct fsm_object *obj)
 {
-    while (!fsm_next_state(obj));
+    while (!fsm_next_state(obj)){
+        sleep(1);
+
+    }
     return 0;
 }
 
@@ -110,6 +119,8 @@ int fsm_to_state(struct fsm_object *obj, char *state, int num, void** arg)
         tmp=tmp->next;
     if (tmp == NULL)
         return -1;
+    obj->fsm_prev_state=obj->fsm_cur_state;
+    obj->fsm_prev_state_name=obj->fsm_cur_state_name;
     obj->fsm_cur_state = tmp;
     obj->fsm_cur_state_name = tmp->name;
     obj->fsm_arg_num = num;

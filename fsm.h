@@ -6,6 +6,8 @@
  */
 
 // forword decleration
+
+#define PRINT_STATES(OBJECT) do{ if(OBJECT->fsm_prev_state_name){ printf("cs:%s,ps:%s",OBJECT->fsm_cur_state_name,OBJECT->fsm_prev_state_name);}else {printf("cs:%s,ps:null",OBJECT->fsm_cur_state_name);}}while(0);
 struct fsm_object;
 
 /**
@@ -40,10 +42,12 @@ struct fsm_object{
      * name of current FSM state
      */
     struct fsm_state * fsm_cur_state;
+    struct fsm_state * fsm_prev_state;
     /**
      * number of argument passed to the nest state
      */
     char * fsm_cur_state_name;
+    char * fsm_prev_state_name;
     /**
      * pointer to current FSM state
      */
