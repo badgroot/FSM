@@ -1,1 +1,11 @@
 a FSM implementation in C
+original 
+https://github.com/ankurs/FSM.git
+
+Cmake Required
+build:
+mkdir build
+cd build
+cmake ..
+make
+
